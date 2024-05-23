@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polygon } from 'react-native-maps';
 import * as Location from 'expo-location';
 
 export default function App() {
@@ -11,6 +11,8 @@ export default function App() {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
+  const [pins, setPins] = useState([]);
+  const [dropPinMode, setDropPinMode] = useState(false);
 
   const handleLocateUser = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -29,8 +31,6 @@ export default function App() {
   };
 
   const handleSearch = async () => {
-    // You would typically use a geocoding API here to convert the address to coordinates.
-    // For example, you could use the Google Geocoding API:
     const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyBsqYPiezi0_mCdQ0I6pbH09DpFquk-dck`);
     const data = await response.json();
     const location = data.results[0].geometry.location;
@@ -42,13 +42,30 @@ export default function App() {
     });
   };
 
+  const handleAddPin = () => {
+    setDropPinMode(true);
+  };
+
+  const handleMapPress = (e) => {
+    if (dropPinMode) {
+      setPins([...pins, e.nativeEvent.coordinate]);
+      setDropPinMode(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
         region={region}
+        onPress={handleMapPress}
       >
-        <Marker coordinate={region} />
+        {pins.map((pin, index) => (
+          <Marker key={index} coordinate={pin} />
+        ))}
+        {pins.length > 2 && (
+          <Polygon coordinates={pins} fillColor="rgba(100, 200, 200, 0.3)" />
+        )}
       </MapView>
       <View style={styles.searchBar}>
         <TextInput
@@ -60,6 +77,7 @@ export default function App() {
         <Button title="Search" onPress={handleSearch} />
       </View>
       <Button title="Locate me" onPress={handleLocateUser} />
+      <Button title="Add Pin" onPress={handleAddPin} />
     </View>
   );
 }
