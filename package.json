@@ -6,16 +6,30 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "postinstall": "node postinstall.js"
   },
   "dependencies": {
-    "expo": "~50.0.17",
+    "@react-native-community/geolocation": "^3.2.1",
+    "expo": "^51.0.5",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
-    "react-native": "0.73.6"
+    "react-native": "0.73.6",
+    "react-native-maps": "^1.15.1",
+    "react-native-web": "~0.19.10",
+    "react-dom": "18.2.0",
+    "@expo/metro-runtime": "~3.2.1",
+    "expo-location": "~17.0.1",
+    "expo-google-app-auth": "~8.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@eslint/js": "^9.2.0",
+    "@react-native-community/eslint-config": "^3.2.0",
+    "eslint-plugin-ft-flow": "^3.0.9",
+    "eslint-plugin-react": "^7.34.1",
+    "globals": "^15.1.0",
+    "prettier": "3.2.5"
   },
   "private": true
 }
